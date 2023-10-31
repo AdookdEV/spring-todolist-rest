@@ -1,36 +1,40 @@
 package com.adilet.todolist.controller;
 
-import com.adilet.todolist.entity.Task;
 import com.adilet.todolist.entity.TaskList;
+import com.adilet.todolist.service.TaskListService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/lists")
 public class TaskListController {
+    private final TaskListService taskListService;
+
     @PostMapping
     public TaskList addTaskList(@RequestBody TaskList taskList) {
-        return null;
+        return taskListService.addTaskList(taskList);
     }
 
     @GetMapping
     public List<TaskList> getAllTaskLists() {
-        return null;
+        return taskListService.findAll();
     }
 
     @GetMapping("/{id}")
-    public List<Task> getTasks(@PathVariable Integer id) {
-        return null;
+    public TaskList getTaskListById(@PathVariable Integer id) {
+        return taskListService.findById(id);
     }
 
-    @PutMapping
-    public TaskList updateTaskList(@RequestBody TaskList taskList) {
-        return null;
+    @PutMapping("/{id}")
+    public TaskList updateTaskList(@PathVariable Integer id, @RequestBody TaskList taskList) {
+        return taskListService.updateById(id, taskList);
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deleteTaskListById(@PathVariable Integer id) {
-        return null;
+    public void deleteTaskListById(@PathVariable Integer id) {
+        taskListService.deleteById(id);
     }
 }

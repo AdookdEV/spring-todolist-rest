@@ -16,4 +16,12 @@ public class Task {
     private String description;
     private Boolean isDone = false;
     private LocalDateTime deadline;
+
+    @ManyToOne
+    @JoinColumn(name="task_list_id")
+    private TaskList taskList;
+
+    @ManyToOne
+    @JoinColumn(name="creator_id", nullable=false)
+    private  User creator;
 }
