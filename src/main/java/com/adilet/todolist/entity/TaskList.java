@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="TASK_LIST")
+@Table(name="task_lists")
 public class TaskList {
     @Id
     @GeneratedValue

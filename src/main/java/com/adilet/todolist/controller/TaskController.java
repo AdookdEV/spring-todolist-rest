@@ -5,6 +5,7 @@ import com.adilet.todolist.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -24,9 +25,12 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getTasks(@RequestParam(required = false) String listId,
-                               @RequestParam(required = false) String tagName) {
-        return null;
+    public List<Task> getTasks(@RequestParam(required = false) Integer listId,
+                               @RequestParam(required = false) String tags) {
+        if (listId == null && tags == null) {
+            return taskService.findAll();
+        }
+        return taskService.findByTagsAndListId(listId, tags.split(","));
     }
 
     @PutMapping("/{id}")

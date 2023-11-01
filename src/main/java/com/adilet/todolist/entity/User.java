@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="\"USER\"")
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue

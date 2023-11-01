@@ -5,7 +5,9 @@ import com.adilet.todolist.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,14 @@ public class TaskService {
         return taskRepository
                 .findById(id)
                 .orElseThrow();
+    }
+
+    public List<Task> findByTagsAndListId(Integer listId, String[] tags) {
+        Set<Task> tasks = new HashSet<>();
+        for (String tag : tags) {
+            tasks.addAll(taskRepository.findTasksByTagAndListId(listId, tag));
+        }
+        return tasks.stream().toList();
     }
 
     public List<Task> findAll() {

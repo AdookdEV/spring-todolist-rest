@@ -2,12 +2,15 @@ package com.adilet.todolist.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ManyToAny;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name="TASK")
+@Table(name="tasks")
 public class Task {
     @Id
     @GeneratedValue
@@ -15,13 +18,22 @@ public class Task {
     private String header;
     private String description;
     private Boolean isDone = false;
-    private LocalDateTime deadline;
+    private LocalDate deadline;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name="task_list_id")
     private TaskList taskList;
 
-    @ManyToOne
-    @JoinColumn(name="creator_id", nullable=false)
-    private  User creator;
+    @ManyToMany
+    @JoinTable(
+            name="tasks_tags",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
+
+//    @ManyToOne
+//    @JoinColumn(name="creator_id", nullable=false)
+//    private  User creator;
 }

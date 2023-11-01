@@ -30,6 +30,6 @@ public class TagService {
     }
 
     public void deleteById(Integer id) {
-
+        tagRepository.deleteById(id);
     }
 }
