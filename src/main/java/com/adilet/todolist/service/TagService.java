@@ -1,6 +1,7 @@
 package com.adilet.todolist.service;
 
 import com.adilet.todolist.entity.Tag;
+import com.adilet.todolist.exception.TagNotFoundException;
 import com.adilet.todolist.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,8 @@ public class TagService {
     }
 
     public Tag findById(Integer id) {
-        return tagRepository.findById(id).orElseThrow();
+        return tagRepository.findById(id)
+                .orElseThrow(TagNotFoundException::new);
     }
 
     public List<Tag> findAll() {

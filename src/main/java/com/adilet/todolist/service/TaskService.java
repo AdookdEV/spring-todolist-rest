@@ -5,9 +5,8 @@ import com.adilet.todolist.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +24,11 @@ public class TaskService {
     }
 
     public List<Task> findByTagsAndListId(Integer listId, String[] tags) {
-        Set<Task> tasks = new HashSet<>();
-        for (String tag : tags) {
-            tasks.addAll(taskRepository.findTasksByTagAndListId(listId, tag));
+        List<String> tagList = Arrays.asList(tags);
+        if (tagList.isEmpty()) {
+            tagList.add("");
         }
-        return tasks.stream().toList();
+        return taskRepository.findTasksByTagsAndListId(listId, tagList);
     }
 
     public List<Task> findAll() {
@@ -44,4 +43,6 @@ public class TaskService {
     public void deleteById(Integer id) {
         taskRepository.deleteById(id);
     }
+
+
 }

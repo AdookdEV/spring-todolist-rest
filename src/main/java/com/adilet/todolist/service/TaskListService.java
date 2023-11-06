@@ -1,6 +1,7 @@
 package com.adilet.todolist.service;
 
 import com.adilet.todolist.entity.TaskList;
+import com.adilet.todolist.exception.TaskListNotFoundException;
 import com.adilet.todolist.repository.TaskListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ public class TaskListService {
     }
 
     public TaskList findById(Integer id) {
-        return taskListRepository.findById(id).orElseThrow();
+        return taskListRepository.findById(id)
+                .orElseThrow(TaskListNotFoundException::new);
     }
 
     public TaskList updateById(Integer id, TaskList taskList) {
