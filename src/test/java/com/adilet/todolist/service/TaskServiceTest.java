@@ -26,13 +26,21 @@ public class TaskServiceTest {
 
 
     @Test
-    public void shouldReturnTasksByTags() {
+    public void shouldReturnTasksByTagsAndListId() {
         List<Task> tasksWithImportant = setUpTasks();
-        Mockito.when(taskRepository.findTasksByTagAndListId(1, "important"))
+        Mockito.when(taskRepository.findTasksByTagsAndListId(1, List.of("important")))
                 .thenReturn(tasksWithImportant);
+
+        // Tags by which it needs to find tasks.
         String[] tags = new String[] {"important"};
-        Assertions.assertNotNull(taskService.findByTagsAndListId(1, tags));
-        Assertions.assertEquals(3, taskService.findByTagsAndListId(1, tags).size());
+
+        List<Task> filteredTasks = taskService.findByTagsAndListId(1, tags);
+
+        Assertions.assertNotNull(filteredTasks);
+        Assertions.assertEquals(3, filteredTasks.size());
+
+
+
     }
 
     private List<Tag> setUpTags() {
