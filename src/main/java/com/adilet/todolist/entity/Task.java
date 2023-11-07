@@ -25,7 +25,7 @@ public class Task {
     private String description;
     private Boolean isDone = false;
     private LocalDate deadline;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDate createdAt = LocalDate.now();
 
     @ManyToOne
     @JoinColumn(name="task_list_id")
