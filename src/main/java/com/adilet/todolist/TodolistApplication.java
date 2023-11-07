@@ -1,7 +1,9 @@
 package com.adilet.todolist;
 
+import com.adilet.todolist.entity.Role;
 import com.adilet.todolist.entity.Tag;
 import com.adilet.todolist.entity.TaskList;
+import com.adilet.todolist.repository.RoleRepository;
 import com.adilet.todolist.repository.TagRepository;
 import com.adilet.todolist.repository.TaskListRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,23 @@ import java.util.List;
 public class TodolistApplication {
 	private final TagRepository tagRepository;
 	private final TaskListRepository taskListRepository;
+	private final RoleRepository roleRepository;
+
+	private void createRoles() {
+		Role userRole = new Role();
+		userRole.setName("ROLE_USER");
+
+		Role adminRole = new Role();
+		adminRole.setName("ROLE_ADMIN");
+		roleRepository.saveAll(List.of(userRole, adminRole));
+	}
 
 	@Bean
 	CommandLineRunner commandLineRunner() {
 		return args -> {
+
+			createRoles();
+
 			Tag tag1 = new Tag();
 			tag1.setName("important");
 
@@ -37,6 +52,9 @@ public class TodolistApplication {
 			list2.setName("University");
 
 			taskListRepository.saveAll(List.of(list1, list2));
+
+
+
 		};
 	}
 

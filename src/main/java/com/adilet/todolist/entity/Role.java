@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="task_lists")
-public class TaskList {
+@Table(name="roles")
+public class Role {
     @Id
     @GeneratedValue
     private Integer id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 }

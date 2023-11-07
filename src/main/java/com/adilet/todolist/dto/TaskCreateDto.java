@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -14,7 +13,7 @@ public class TaskCreateDto {
     private Boolean isDone = false;
     private LocalDate deadline;
     @JsonIgnore
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDate createdAt = LocalDate.now();
     private Integer taskListId;
     private List<Integer> tagsIds;
 }
