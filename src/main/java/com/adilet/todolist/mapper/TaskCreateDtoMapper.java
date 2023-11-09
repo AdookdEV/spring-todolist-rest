@@ -7,7 +7,7 @@ import com.adilet.todolist.entity.Task;
 import java.util.ArrayList;
 
 public class TaskCreateDtoMapper {
-    public static Task map(TaskCreateDto taskDto) {
+    public static Task toTask(TaskCreateDto taskDto) {
         return Task.builder()
                 .header(taskDto.getHeader())
                 .description(taskDto.getDescription())

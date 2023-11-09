@@ -3,8 +3,6 @@ package com.adilet.todolist.controller;
 import com.adilet.todolist.dto.TaskCreateDto;
 import com.adilet.todolist.entity.Task;
 import com.adilet.todolist.mapper.TaskCreateDtoMapper;
-import com.adilet.todolist.repository.TagRepository;
-import com.adilet.todolist.repository.TaskRepository;
 import com.adilet.todolist.service.TagService;
 import com.adilet.todolist.service.TaskListService;
 import com.adilet.todolist.service.TaskService;
@@ -14,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,7 +25,7 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<Task> addTask(@RequestBody TaskCreateDto taskDto) {
-        Task task = TaskCreateDtoMapper.map(taskDto);
+        Task task = TaskCreateDtoMapper.toTask(taskDto);
         Integer taskListId = taskDto.getTaskListId();
         List<Integer> tagIds = taskDto.getTagsIds();
         if (tagIds != null) {

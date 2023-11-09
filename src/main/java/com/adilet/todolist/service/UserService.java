@@ -1,7 +1,9 @@
 package com.adilet.todolist.service;
 
+import com.adilet.todolist.dto.UserDto;
 import com.adilet.todolist.entity.Role;
 import com.adilet.todolist.entity.User;
+import com.adilet.todolist.mapper.UserMapper;
 import com.adilet.todolist.repository.RoleRepository;
 import com.adilet.todolist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +42,19 @@ public class UserService implements UserDetailsService {
         }
         user.setRoles(List.of(roleRepository.findRoleByName("ROLE_USER").get()));
         userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findById(Integer id) {
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("User with id %d not found", id)
+        ));
+    }
+
+    public void disableUser(Integer id) {
+        userRepository.disableById(id);
     }
 }
