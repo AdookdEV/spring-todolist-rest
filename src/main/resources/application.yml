@@ -1,11 +1,15 @@
+jwt:
+  secret:
+  lifetime: 20m
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/todolistrest
-    username: postgres
-    password: admin
+    username:
+    password:
     driverClassName: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+#    show-sql: true
     hibernate:
       ddl-auto: create-drop
