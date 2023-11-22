@@ -14,6 +14,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
 
     @Modifying
-    @Query("UPDATE User u SET u.isNonDisabled = true WHERE u.id = :id")
+    @Query("UPDATE User u SET u.isNonDisabled = false WHERE u.id = :id")
     void disableById(@Param("id") Integer id);
+
+    @Modifying
+    @Query("UPDATE User u SET u.isNonDisabled = true WHERE u.id = :id")
+    void enableById(@Param("id") Integer id);
 }

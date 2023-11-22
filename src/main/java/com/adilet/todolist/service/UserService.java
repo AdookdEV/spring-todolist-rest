@@ -1,15 +1,15 @@
 package com.adilet.todolist.service;
 
-import com.adilet.todolist.dto.UserDto;
 import com.adilet.todolist.entity.Role;
 import com.adilet.todolist.entity.User;
-import com.adilet.todolist.mapper.UserMapper;
 import com.adilet.todolist.repository.RoleRepository;
 import com.adilet.todolist.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +19,7 @@ import java.util.List;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,6 +34,7 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    @Transactional
     public void createUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException(String.format("User %s already exists", user.getUsername()));
@@ -40,7 +42,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException(String.format("Email %s already exists", user.getEmail()));
         }
-        user.setRoles(List.of(roleRepository.findRoleByName("ROLE_USER").get()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -54,7 +56,19 @@ public class UserService implements UserDetailsService {
         ));
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+                String.format("User %s not found", username)
+        ));
+    }
+
+    @Transactional
     public void disableUser(Integer id) {
         userRepository.disableById(id);
+    }
+
+    @Transactional
+    public void enableUser(Integer id) {
+        userRepository.enableById(id);
     }
 }

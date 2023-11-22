@@ -12,11 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="tags")
-
 public class Tag {
     @Id
     @GeneratedValue
     private Integer id;
     @Column(nullable = false)
     private String name;
+    @ManyToOne
+    @JoinColumn(name="creator_id", nullable=false)
+    private User creator;
 }

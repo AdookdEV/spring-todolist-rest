@@ -23,12 +23,11 @@ public class TaskService {
                 .orElseThrow();
     }
 
-    public List<Task> findByTagsAndListId(Integer listId, String[] tags) {
-        List<String> tagList = Arrays.asList(tags);
-        if (tagList.isEmpty()) {
-            tagList.add("");
+    public List<Task> findByTagsAndListId(Integer listId, List<String> tags) {
+        if (tags.isEmpty()) {
+            tags.add("");
         }
-        return taskRepository.findTasksByTagsAndListId(listId, tagList);
+        return taskRepository.findTasksByTagsAndListId(listId, tags);
     }
 
     public List<Task> findAll() {

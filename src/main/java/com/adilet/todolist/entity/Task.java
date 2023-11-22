@@ -39,7 +39,7 @@ public class Task {
     )
     private List<Tag> tags;
 
-//    @ManyToOne
-//    @JoinColumn(name="creator_id", nullable=false)
-//    private  User creator;
+    @ManyToOne
+    @JoinColumn(name="creator_id", nullable=false)
+    private  User creator;
 }
