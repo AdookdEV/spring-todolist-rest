@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/signin")
@@ -45,7 +46,9 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> register(@RequestBody UserDto.Request.Create userDto) {
-        userService.createUser(UserDto.Request.Create.toUser(userDto));
+        User user = UserDto.Request.Create.toUser(userDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.createUser(user);
         return ResponseEntity.ok("The user registered successfully");
     }
 }
