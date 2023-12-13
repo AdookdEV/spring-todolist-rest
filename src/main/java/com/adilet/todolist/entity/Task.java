@@ -1,14 +1,13 @@
 package com.adilet.todolist.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ManyToAny;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,6 +20,7 @@ public class Task {
     @Id
     @GeneratedValue
     private Integer id;
+    @Column(nullable = false)
     private String header;
     private String description;
     private Boolean isDone = false;
@@ -28,7 +28,7 @@ public class Task {
     private LocalDate createdAt = LocalDate.now();
 
     @ManyToOne
-    @JoinColumn(name="task_list_id")
+    @JoinColumn(name="task_list_id", nullable = false)
     private TaskList taskList;
 
     @ManyToMany
@@ -39,6 +39,7 @@ public class Task {
     )
     private List<Tag> tags;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToOne
     @JoinColumn(name="creator_id", nullable=false)
     private  User creator;

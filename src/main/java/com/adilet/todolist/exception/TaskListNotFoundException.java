@@ -1,5 +1,11 @@
 package com.adilet.todolist.exception;
 
 public class TaskListNotFoundException extends RuntimeException {
-    // TODO: 19.11.2023   
+    public TaskListNotFoundException() {
+        super();
+    }
+
+    public TaskListNotFoundException(String message) {
+        super(message);
+    }
 }

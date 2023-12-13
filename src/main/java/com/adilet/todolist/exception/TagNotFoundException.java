@@ -1,5 +1,11 @@
 package com.adilet.todolist.exception;
 
 public class TagNotFoundException extends RuntimeException {
-    // TODO: 19.11.2023  
+    public TagNotFoundException() {
+        super();
+    }
+
+    public TagNotFoundException(String message) {
+        super(message);
+    }
 }

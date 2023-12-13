@@ -1,15 +1,20 @@
 package com.adilet.todolist.service;
 
 import com.adilet.todolist.entity.Role;
+import com.adilet.todolist.entity.TaskList;
 import com.adilet.todolist.entity.User;
+import com.adilet.todolist.exception.RegistrationException;
 import com.adilet.todolist.repository.RoleRepository;
 import com.adilet.todolist.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +24,7 @@ import java.util.List;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final TaskListService taskListService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,17 +42,22 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void createUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException(String.format("User %s already exists", user.getUsername()));
+            throw new RegistrationException(String.format("User %s already exists", user.getUsername()));
         }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException(String.format("Email %s already exists", user.getEmail()));
+            throw new RegistrationException(String.format("Email %s already exists", user.getEmail()));
         }
-
-        userRepository.save(user);
+        Role userRole = roleRepository.findRoleByName("USER").orElseThrow();
+        user.setRoles(List.of(userRole));
+        TaskList defaultTaskList = new TaskList();
+        defaultTaskList.setName("Task list");
+        defaultTaskList.setCreator(userRepository.save(user));
+        taskListService.addTaskList(defaultTaskList, user.getUsername());
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(@Min(0) Integer offset,
+                              @Min(1) @Max(100) Integer limit) {
+        return userRepository.findAll(PageRequest.of(offset, limit));
     }
 
     public User findById(Integer id) {

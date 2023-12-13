@@ -1,10 +1,10 @@
 jwt:
-  secret:
+  secret: H9qKJMrBzF9NFaSmK7DwyGLx6G2qFwff  # 256 bit secret
   lifetime: 20m
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/todolistrest
+    url:
     username:
     password:
     driverClassName: org.postgresql.Driver

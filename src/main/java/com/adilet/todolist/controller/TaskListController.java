@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,28 +17,33 @@ public class TaskListController {
     private final TaskListService taskListService;
 
     @PostMapping
-    public ResponseEntity<TaskList> addTaskList(@RequestBody TaskList taskList) {
-        return new ResponseEntity<>(taskListService.addTaskList(taskList), HttpStatus.CREATED);
+    public ResponseEntity<TaskList> addTaskList(@RequestBody TaskList taskList, Principal principal) {
+        return new ResponseEntity<>(taskListService.addTaskList(taskList, principal.getName()), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskList>> getAllTaskLists() {
-        return ResponseEntity.ok(taskListService.findAll());
+    public ResponseEntity<List<TaskList>> getAllTaskListsForUser(Principal principal) {
+        return ResponseEntity.ok(taskListService.findTaskListsByUsername(principal.getName()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskList> getTaskListById(@PathVariable Integer id) {
-        return ResponseEntity.ok(taskListService.findById(id));
+    public ResponseEntity<TaskList> getTaskListById(@PathVariable Integer id, Principal principal) {
+        return ResponseEntity.ok(taskListService.findByIdAndUsername(id, principal.getName()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskList> updateTaskList(@PathVariable Integer id, @RequestBody TaskList taskList) {
-        return ResponseEntity.ok(taskListService.updateById(id, taskList));
+    public ResponseEntity<TaskList> updateTaskList(@PathVariable Integer id,
+                                                   @RequestBody TaskList taskList,
+                                                   Principal principal) {
+        if (!id.equals(taskList.getId())) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok(taskListService.updateById(id, taskList, principal.getName()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTaskListById(@PathVariable Integer id) {
-        taskListService.deleteById(id);
+    public ResponseEntity<String> deleteTaskListByIdAndUser(@PathVariable Integer id, Principal principal) {
+        taskListService.deleteByIdAndUsername(id, principal.getName());
         return ResponseEntity.noContent().build();
     }
 }

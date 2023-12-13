@@ -35,10 +35,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth ->  auth
                         .requestMatchers("/api/auth/signup", "/api/auth/signin")
                         .permitAll()
-                        .requestMatchers("/api/user/disable/{id}", "/api/user/enable/{id}")
-                        .hasRole("ADMIN")
                         .anyRequest()
-                        .authenticated()
+                        .hasAnyRole("ADMIN", "USER")
                 )
                 .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

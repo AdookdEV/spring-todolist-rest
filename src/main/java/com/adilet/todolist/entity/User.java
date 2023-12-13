@@ -3,10 +3,9 @@ package com.adilet.todolist.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
@@ -17,8 +16,10 @@ public class User {
     @Id
     @GeneratedValue
     private Integer id;
+    @NotBlank
     @Column(unique = true, nullable = false)
     private String username;
+    @Email
     @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)

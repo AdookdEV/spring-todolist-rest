@@ -1,10 +1,8 @@
 package com.adilet.todolist.security;
 
 import com.adilet.todolist.utils.JwtUtils;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 
 @Component
@@ -31,7 +28,6 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        // TODO: 20.11.2023
         String authHeader = request.getHeader("Authorization");
         String username = null;
         String token = null;
@@ -41,9 +37,11 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtils.getUsername(token);
             } catch (ExpiredJwtException e) {
-                log.debug("Token lifetime is expired");
+                log.error("Token lifetime is expired");
             } catch (SignatureException e) {
-                log.debug("Invalid signature");
+                log.error("Invalid signature");
+            } catch (MalformedJwtException e) {
+                log.error(e.getMessage());
             }
         }
 

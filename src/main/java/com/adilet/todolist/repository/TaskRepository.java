@@ -1,6 +1,7 @@
 package com.adilet.todolist.repository;
 
 import com.adilet.todolist.entity.Task;
+import com.adilet.todolist.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +17,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
             "WHERE (tg.name IN :tagNames OR '' IN :tagNames) AND " +
             "(t.task_list_id = :listId OR :listId IS NULL)", nativeQuery = true)
     List<Task> findTasksByTagsAndListId(Integer listId, List<String> tagNames);
+
+    List<Task> findTasksByCreator_Username(String username);
 }

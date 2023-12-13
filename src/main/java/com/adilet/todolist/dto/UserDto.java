@@ -26,7 +26,6 @@ public enum UserDto {;
             public static User toUser(UserDto.Request.Create dto) {
                 User u = new User();
                 BeanUtils.copyProperties(dto, u);
-                System.out.println(u);
                 return u;
             }
         }
@@ -38,8 +37,6 @@ public enum UserDto {;
         }
     }
 
-
-
     public enum Response {;
         @Value
         public static class Private implements Id, Username, Email, IsNonDisabled, Roles {
@@ -48,6 +45,25 @@ public enum UserDto {;
             String email;
             Boolean isNonDisabled;
             Collection<Role> roles;
+
+            public static User toUser(UserDto.Response.Private dto) {
+                User u = new User();
+                u.setId(dto.getId());
+                u.setUsername(dto.getUsername());
+                u.setEmail(dto.getEmail());
+                u.setIsNonDisabled(dto.getIsNonDisabled());
+                u.setRoles(dto.getRoles());
+                return u;
+            }
+
+            public static UserDto.Response.Private toDto(User u) {
+                return new Private(
+                        u.getId(),
+                        u.getUsername(),
+                        u.getEmail(),
+                        u.getIsNonDisabled(),
+                        u.getRoles());
+            }
         }
 
         @Value
